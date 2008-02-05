@@ -63,6 +63,7 @@ Catalyst::Authentication::Store::LDAP
                user_filter         => "(&(objectClass=posixAccount)(uid=%s))",
                user_scope          => "one",
                user_search_options => { deref => "always" },
+               user_results_filter => sub { return shift->pop_entry },
              },
            },
          },
@@ -234,6 +235,27 @@ Be careful not to specify:
 
 As they are already taken care of by other configuration options.
 
+=head2 user_results_filter
+
+This is a Perl CODE ref that can be used to filter out multiple results
+from your LDAP query. In theory, your LDAP query should only return one result
+and find_user() will throw an exception if it encounters more than one result.
+However, if you have, for whatever reason, a legitimate reason for returning
+multiple search results from your LDAP query, use C<user_results_filter> to filter
+out the LDAP entries you do not want considered. Your CODE ref should expect
+a single argument, a Net::LDAP::Search object, and it should return exactly one
+value, a Net::LDAP::Entry object.
+
+Example:
+
+ user_results_filter => sub {
+                          my $search_obj = shift;
+                          foreach my $entry ($search_obj->entries) {
+                              return $entry if my_match_logic( $entry );
+                          }
+                          return undef; # i.e., no match
+                        }
+ 
 =head2 use_roles
 
 Whether or not to enable role lookups.  It defaults to true; set it to 0 if 

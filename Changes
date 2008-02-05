@@ -5,6 +5,10 @@
     - changed release date for 0.0600
     - added AD config suggestions from matija@serverflow.com
     - bumped req base Auth package to 0.10003
+    - lookup_user() now throws an exception if there is more than one entry returned
+      from a LDAP search
+    - added new user_search_filter config option to filter out multiple entries on
+      Perl side
 
 
 0.0600  karman 18 Oct 2007 [was: omega Thu Aug 09 09:22:00 CET 2007]

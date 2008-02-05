@@ -36,6 +36,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             'user_search_options' => {
                 'deref' => 'always',
             },
+            'user_results_filter' => sub { return shift->pop_entry },
             'entry_class' => 'MyApp::LDAP::Entry',
             'use_roles' => 1,
             'role_basedn' => 'ou=groups,dc=yourcompany,dc=com',
@@ -90,6 +91,7 @@ BEGIN {
             user_attrs user_field use_roles role_basedn
             role_filter role_scope role_field role_value
             role_search_options start_tls start_tls_options
+            user_results_filter
             )
     );
 }
@@ -263,7 +265,7 @@ Given a User ID, this method will:
         'attributes' => $attributes,
      }
 
-This method is usually only called by get_user.
+This method is usually only called by find_user().
 
 =cut
 
@@ -295,21 +297,32 @@ sub lookup_user {
             "LDAP Error while searching for user: " . $usersearch->error );
     }
     my $userentry;
-    my $user_field = $self->user_field;
-    my @user_fields
-        = ref $user_field eq 'ARRAY' ? @$user_field : ($user_field);
-
-    # TODO check for multiple matches, which we should really not have.
-RESULT: while ( my $entry = $usersearch->pop_entry ) {
-        foreach my $field (@user_fields) {
-            foreach my $value ( $entry->get_value($field) ) {
-                if ( $value eq $id ) {
-                    $userentry = $entry;
-                    last RESULT;
-                }
-            }
-        }
+    my $user_field     = $self->user_field;
+    my $results_filter = $self->user_results_filter;
+    my $entry;
+    if ( defined($results_filter) ) {
+        $entry = &$results_filter($usersearch);
     }
+    else {
+        $entry = $usersearch->pop_entry;
+    }
+    if ( $usersearch->pop_entry ) {
+        Catalyst::Exception->throw(
+                  "More than one entry matches user search.\n"
+                . "Consider defining a user_results_filter sub." );
+    }
+
+    # a little extra sanity check with the 'eq' since LDAP already
+    # says it matches.
+    if ( defined($entry) ) {
+        unless ( $entry->get_value($user_field) eq $id ) {
+            Catalyst::Exception->throw(
+                "LDAP claims '$user_field' equals '$id' but results entry does not match."
+            );
+        }
+        $userentry = $entry;
+    }
+
     $ldap->unbind;
     $ldap->disconnect;
     unless ($userentry) {
