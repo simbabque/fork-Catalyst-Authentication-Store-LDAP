@@ -1,0 +1,42 @@
+0.1000  4 Feb 2008
+    - forked from Catalyst::Plugin::Authentication::Store::LDAP and name changed 
+      to Catalyst::Authentication::Store::LDAP
+    - tests now use Net::LDAP::Server::Test instead of relying on openldap.org
+    - changed release date for 0.0600
+    - added AD config suggestions from matija@serverflow.com
+    - bumped req base Auth package to 0.10003
+
+
+0.0600  karman 18 Oct 2007 [was: omega Thu Aug 09 09:22:00 CET 2007]
+    - Someone had put some 0.052 version out, need to bump past that
+    - Add realms API support to match newest C::P::Authentication API. (karman)
+    - Add POD tests. (karman)
+    
+0.06 omega Thu Aug 09 09:00:00 CET 2007
+    - Added support for entry_class in the same way that Catalyst::Model::LDAP
+      supports it, allowing one to override what class is returned from
+      $c->user->ldap_entry, and thus allowing one to add methods to the user
+      object
+      
+0.05
+    - Added support for multiple identifiers.
+
+0.04 adam Tue Mar 21 15:31:57 PST 2006
+    - Fixed rt.cpan.org #18250, sample YAML config incorrectly using arrays
+    - Added some error checking around whether or not we have been properly
+      configured.
+
+0.03 adam Fri Feb 17 09:51:36 PST 2006
+    - Gavin Henry's documentation patch for YAML configuration
+
+0.02 adam Fri Feb 10 14:10:23 PST 2006
+    - Now throws an exception if the initial bind fails
+    - Changed the default role_filter from (member=%s) to (memberUid=%s)
+    - Fixed bug in Backend->lookup_user that was not properly handling
+      when a user was not found in the backing store at all.
+
+0.01 adam Thu Feb  8 14:28:18 2006  
+    - initial revision
+    - supports authentication
+    - supports roles
+

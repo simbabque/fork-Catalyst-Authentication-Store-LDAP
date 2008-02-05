@@ -1,0 +1,6 @@
+.svn
+^Makefile$
+^blib/
+^.*\.swp$
+^MANIFEST\.
+^pm_to_blib$

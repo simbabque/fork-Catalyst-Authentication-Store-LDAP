@@ -1,0 +1,6 @@
+* Cache - this hits the directory a lot during full Auth/Authz usage.  
+
+* Recipes - We could handle some default recipes in the documentation for
+             different usage patterns.
+
+* Tests - We don't do any but the most cursory of tests
