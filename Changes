@@ -1,3 +1,7 @@
+0.1001  xxx
+    - matthewr pointed out that the SYNOPSIS 'use Catalyst' line is wrong.
+
+
 0.1000  4 Feb 2008
     - forked from Catalyst::Plugin::Authentication::Store::LDAP and name changed 
       to Catalyst::Authentication::Store::LDAP

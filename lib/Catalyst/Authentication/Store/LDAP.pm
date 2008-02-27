@@ -26,11 +26,9 @@ Catalyst::Authentication::Store::LDAP
 
 =head1 SYNOPSIS
 
-    use Catalyst qw/
+    use Catalyst qw(
       Authentication
-      Authentication::Store::LDAP
-      Authentication::Credential::Password
-      /;
+      );
 
     __PACKAGE__->config(
       'authentication' => {
