@@ -7,7 +7,6 @@ use Catalyst::Exception;
 use Test::More tests => 6;
 use lib 't/lib';
 use LDAPTest;
-my $server = LDAPTest::spawn_server();
 
 SKIP: {
 
@@ -15,6 +14,8 @@ SKIP: {
     if ($@) {
         skip "Catalyst::Model::LDAP not installed", 6;
     }
+
+    my $server = LDAPTest::spawn_server();
 
     use_ok("Catalyst::Authentication::Store::LDAP::Backend");
 
