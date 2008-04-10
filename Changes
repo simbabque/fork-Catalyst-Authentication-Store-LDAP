@@ -1,5 +1,7 @@
-0.1001  xxx
+0.1001  9 April 2008
     - matthewr pointed out that the SYNOPSIS 'use Catalyst' line is wrong.
+    - imacat reported that t/03-entry was failing when Catalyst::Model::LDAP was
+      not installed. Fixed RT# 34777.
 
 
 0.1000  4 Feb 2008
