@@ -46,7 +46,7 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '0.1001';
+our $VERSION = '0.1002';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 

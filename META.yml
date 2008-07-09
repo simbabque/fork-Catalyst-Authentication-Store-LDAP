@@ -3,7 +3,7 @@ abstract: Authenticate Users against LDAP Directories
 author: 
   - Adam Jacob <holoway@cpan.org>
 build_requires: 
-  Net::LDAP::Server::Test: 0.02
+  Net::LDAP::Server::Test: 0.03
   Test::More: 0
 distribution_type: module
 generated_by: Module::Install version 0.68
@@ -19,4 +19,4 @@ no_index:
 requires: 
   Catalyst::Plugin::Authentication: 0.10003
   Net::LDAP: 0
-version: 0.1001
+version: 0.1002

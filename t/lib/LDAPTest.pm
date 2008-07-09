@@ -20,7 +20,7 @@ sub spawn_server {
     );
     push @mydata, $entry;
 
-    return Net::LDAP::Server::Test->new( server_port(), \@mydata );
+    return Net::LDAP::Server::Test->new( server_port(), data => \@mydata );
 }
 
 1;

@@ -1,3 +1,7 @@
+0.1002  9 July 2008
+    - tests updated to use Net::LDAP::Server::Test 0.03
+
+
 0.1001  9 April 2008
     - matthewr pointed out that the SYNOPSIS 'use Catalyst' line is wrong.
     - imacat reported that t/03-entry was failing when Catalyst::Model::LDAP was
