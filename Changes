@@ -1,3 +1,8 @@
+0.1003 xxxx
+    - get entries in array context rather than scalar context, 
+      allowing for multiple values. patch by scpham.
+
+
 0.1002  9 July 2008
     - tests updated to use Net::LDAP::Server::Test 0.03
 

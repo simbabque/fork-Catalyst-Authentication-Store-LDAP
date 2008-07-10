@@ -395,14 +395,8 @@ sub lookup_roles {
     }
     my $rolesearch = $ldap->search(@searchopts);
     my @roles;
-RESULT: while ( my $entry = $rolesearch->pop_entry ) {
-        my ($role) = $entry->get_value( $self->role_field );
-        if ($role) {
-            push( @roles, $role );
-        }
-        else {
-            next RESULT;
-        }
+RESULT: foreach my $entry ( $rolesearch->entries ) {
+        push( @roles, $entry->get_value( $self->role_field ) );
     }
     return @roles;
 }
