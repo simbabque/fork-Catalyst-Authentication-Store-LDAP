@@ -19,4 +19,4 @@ no_index:
 requires: 
   Catalyst::Plugin::Authentication: 0.10003
   Net::LDAP: 0
-version: 0.1002
+version: 0.1003_01

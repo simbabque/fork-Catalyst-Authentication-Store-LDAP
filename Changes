@@ -1,6 +1,8 @@
 0.1003 xxxx
     - get entries in array context rather than scalar context, 
       allowing for multiple values. patch by scpham.
+    - lc() to compare Net::LDAP results with supplied $id
+      bug reported via RT #39113
 
 
 0.1002  9 July 2008
