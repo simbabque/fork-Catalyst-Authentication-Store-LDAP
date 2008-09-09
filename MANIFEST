@@ -18,6 +18,7 @@ MANIFEST			This list of files
 META.yml
 t/02-realms_api.t
 t/03-entry_class.t
+t/50.auth.case.sensitivity.t
 t/lib/EntryClass.pm
 t/lib/LDAPTest.pm
 t/pod-coverage.t
