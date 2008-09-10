@@ -3,7 +3,7 @@ package Catalyst::Authentication::Store::LDAP;
 use strict;
 use warnings;
 
-our $VERSION = '0.1003_01';
+our $VERSION = '0.1003';
 
 use Catalyst::Authentication::Store::LDAP::Backend;
 
