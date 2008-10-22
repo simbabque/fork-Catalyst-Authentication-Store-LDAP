@@ -46,7 +46,7 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '0.1003';
+our $VERSION = '0.1004';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
@@ -135,6 +135,11 @@ sub check_password {
         = $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password,
         'forauth' );
     if ( defined($ldap) ) {
+        if ($self->store->role_search_as_user) {
+            # Have to do the role lookup _now_, as this is the only time
+            # that we have the user's password/ldap bind..
+            $self->roles($ldap);
+        }
         return 1;
     }
     else {
@@ -150,7 +155,9 @@ Returns the results of L<Catalyst::Authentication::Store::LDAP::Backend>'s "look
 
 sub roles {
     my $self = shift;
-    return $self->store->lookup_roles($self);
+    my $ldap = shift;
+    $self->{_roles} ||= [$self->store->lookup_roles($self, $ldap)];
+    return @{$self->{_roles}};
 }
 
 =head2 for_session

@@ -1,4 +1,11 @@
-0.1003 xxxx
+0.1004  21 Oct 2008
+   - Add the ability to have the user inflated into a custom
+     user class with the user_class option (t0m)
+   - Add the ability for role lookup to be performed within
+     the same (user) bind context that the user's password is
+     checked in (t0m)
+
+0.1003  10 Sept 2008
     - get entries in array context rather than scalar context, 
       allowing for multiple values. patch by scpham.
     - lc() to compare Net::LDAP results with supplied $id

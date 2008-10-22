@@ -3,7 +3,7 @@ package Catalyst::Authentication::Store::LDAP;
 use strict;
 use warnings;
 
-our $VERSION = '0.1003';
+our $VERSION = '0.1004';
 
 use Catalyst::Authentication::Store::LDAP::Backend;
 
@@ -52,6 +52,7 @@ Catalyst::Authentication::Store::LDAP
                role_scope          => "one",
                role_search_options => { deref => "always" },
                role_value          => "dn",
+               role_search_as_user => 0,
                start_tls           => 1,
                start_tls_options   => { verify => "none" },
                entry_class         => "MyApp::LDAP::Entry",
@@ -300,6 +301,23 @@ Be careful not to specify:
     base
 
 As they are already taken care of by other configuration options.
+
+=head2 role_search_as_user
+
+By default this setting is false, and the role search will be performed
+by binding to the directory with the details in the I<binddn> and I<bindpw>
+fields. If this is set to false, then the role search will instead be
+performed when bound as the user you authenticated as.
+
+=head2 entry_class
+
+The name of the class of LDAP entries returned. This class should
+exist and is expected to be a subclass of Net::LDAP::Entry
+
+=head2 user_class
+
+The name of the class of user object returned. By default, this is
+L<Catalyst::Authentication::Store::LDAP::User>.
 
 =head1 METHODS
 

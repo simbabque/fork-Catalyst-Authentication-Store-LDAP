@@ -12,6 +12,7 @@ requires( 'Catalyst::Plugin::Authentication' => '0.10003' );
 #requires('Catalyst::Model::LDAP');
 build_requires('Net::LDAP::Server::Test' => '0.07');
 build_requires('Test::More');
+build_requires('Test::MockObject');
 
 auto_install();
 

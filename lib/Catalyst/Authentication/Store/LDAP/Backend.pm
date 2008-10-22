@@ -38,6 +38,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             },
             'user_results_filter' => sub { return shift->pop_entry },
             'entry_class' => 'MyApp::LDAP::Entry',
+            'user_class' => 'MyUser',
             'use_roles' => 1,
             'role_basedn' => 'ou=groups,dc=yourcompany,dc=com',
             'role_filter' => '(&(objectClass=posixGroup)(member=%s))',
@@ -47,6 +48,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             'role_search_options' => {
                 'deref' => 'always',
             },
+            'role_search_as_user' => 0,
     );
     
     our $users = Catalyst::Authentication::Store::LDAP::Backend->new(\%config);
@@ -78,10 +80,11 @@ use base qw( Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '0.1003';
+our $VERSION = '0.1004';
 
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;
+use Catalyst::Utils ();
 
 BEGIN {
     __PACKAGE__->mk_accessors(
@@ -91,7 +94,7 @@ BEGIN {
             user_attrs user_field use_roles role_basedn
             role_filter role_scope role_field role_value
             role_search_options start_tls start_tls_options
-            user_results_filter
+            user_results_filter user_class role_search_as_user
             )
     );
 }
@@ -125,7 +128,10 @@ sub new {
     $config_hash{'use_roles'}   ||= '1';
     $config_hash{'start_tls'}   ||= '0';
     $config_hash{'entry_class'} ||= 'Catalyst::Model::LDAP::Entry';
+    $config_hash{'user_class'}  ||= 'Catalyst::Authentication::Store::LDAP::User';
+    $config_hash{'role_search_as_user'} ||= 0;
 
+    Catalyst::Utils::ensure_class_loaded($config_hash{'user_class'});
     my $self = \%config_hash;
     bless( $self, $class );
     return $self;
@@ -157,7 +163,7 @@ given User out of the Store.
 
 sub get_user {
     my ( $self, $id ) = @_;
-    my $user = Catalyst::Authentication::Store::LDAP::User->new( $self,
+    my $user = $self->user_class->new( $self,
         $self->lookup_user($id) );
     return $user;
 }
@@ -217,10 +223,7 @@ sub ldap_bind {
     $binddn ||= $self->binddn;
     $bindpw ||= $self->bindpw;
     if ( $binddn eq "anonymous" ) {
-        my $mesg = $ldap->bind;
-        if ( $mesg->is_error ) {
-            Catalyst::Exception->throw( "Error on Bind: " . $mesg->error );
-        }
+        $self->_ldap_bind_anon($ldap);
     }
     else {
         if ($bindpw) {
@@ -239,13 +242,18 @@ sub ldap_bind {
             }
         }
         else {
-            my $mesg = $ldap->bind($binddn);
-            if ( $mesg->is_error ) {
-                return undef;
-            }
+            $self->_ldap_bind_anon($ldap, $binddn);
         }
     }
     return $ldap;
+}
+
+sub _ldap_bind_anon {
+    my ($self, $ldap, $dn) = @_;
+    my $mesg = $ldap->bind($dn);
+    if ( $mesg->is_error ) {
+        Catalyst::Exception->throw( "Error on Bind: " . $mesg->error );
+    }
 }
 
 =head2 lookup_user($id)
@@ -341,10 +349,8 @@ sub lookup_user {
             $attrhash->{ lc($attr) } = \@attrvalues;
         }
     }
-    my $load_class = $self->entry_class . ".pm";
-    $load_class =~ s|::|/|g;
-
-    eval { require $load_class };
+    
+    eval { Catalyst::Utils::ensure_class_loaded($self->entry_class) };
     if ( !$@ ) {
         bless( $userentry, $self->entry_class );
         $userentry->{_use_unicode}++;
@@ -356,11 +362,12 @@ sub lookup_user {
     return $rv;
 }
 
-=head2 lookup_roles($userobj)
+=head2 lookup_roles($userobj, [$ldap])
 
 This method looks up the roles for a given user.  It takes a 
 L<Catalyst::Authentication::Store::LDAP::User> object
-as it's sole argument.
+as it's first argument, and can optionally take a I<Net::LDAP> object which
+is used rather than the default binding if supplied.
 
 It returns an array containing the role_field attribute from all the
 objects that match it's criteria.
@@ -368,11 +375,11 @@ objects that match it's criteria.
 =cut
 
 sub lookup_roles {
-    my ( $self, $userobj ) = @_;
+    my ( $self, $userobj, $ldap ) = @_;
     if ( $self->use_roles == 0 || $self->use_roles =~ /^false$/i ) {
         return undef;
     }
-    my $ldap = $self->ldap_bind;
+    $ldap ||= $self->ldap_bind;
     my @searchopts;
     if ( defined( $self->role_basedn ) ) {
         push( @searchopts, 'base' => $self->role_basedn );
