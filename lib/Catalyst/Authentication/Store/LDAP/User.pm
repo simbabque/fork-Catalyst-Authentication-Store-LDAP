@@ -8,12 +8,15 @@ Catalyst::Authentication::Store::LDAP::User
 
 =head1 SYNOPSIS
 
-You should be creating these objects through L<Catalyst::Authentication::Store::LDAP::Backend>'s "get_user" method, or just letting $c->login do
+You should be creating these objects through L<Catalyst::Authentication::Store::LDAP::Backend>'s "get_user" method, or just letting $c->authenticate do
 it for you.
 
     sub action : Local {
         my ( $self, $c ) = @_;
-        $c->login($c->req->param(username), $c->req->param(password));
+        $c->authenticate({
+            id => $c->req->param(username),
+            password => $c->req->param(password)
+        );
         $c->log->debug($c->user->username . "is really neat!");
     }
 

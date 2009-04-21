@@ -1,3 +1,7 @@
+   - Change documentation which still refers to the old ::Plugin:: style
+     auth system to use ->authenticate instead of ->login, and not say that
+     you need to do things manually to have multiple stores. (t0m)
+
 0.1004  21 Oct 2008
    - Add the ability to have the user inflated into a custom
      user class with the user_class option (t0m)

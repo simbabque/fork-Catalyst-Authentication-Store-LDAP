@@ -53,19 +53,11 @@ Catalyst::Authentication::Store::LDAP::Backend
     
     our $users = Catalyst::Authentication::Store::LDAP::Backend->new(\%config);
 
-    sub action : Local {
-        my ( $self, $c ) = @_;
-
-        $c->login( $users->get_user( $c->req->param("login") ),
-            $c->req->param("password") );
-    }
-
 =head1 DESCRIPTION
 
-You probably want L<Catalyst::Authentication::Store::LDAP>, unless
-you are mixing several stores in a single app and one of them is LDAP.
+You probably want L<Catalyst::Authentication::Store::LDAP>.
 
-Otherwise, this lets you create a store manually. 
+Otherwise, this lets you create a store manually.
 
 See the L<Catalyst::Authentication::Store::LDAP> documentation for
 an explanation of the configuration options.
