@@ -51,7 +51,7 @@ use warnings;
 
 our $VERSION = '0.1004';
 
-BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
+BEGIN { __PACKAGE__->mk_accessors(qw/user store _ldap_connection/) }
 
 use overload '""' => sub { shift->stringify }, fallback => 1;
 
@@ -139,10 +139,13 @@ sub check_password {
         'forauth' );
     if ( defined($ldap) ) {
         if ($self->store->role_search_as_user) {
+            # FIXME - This can be removed and made to use the code below..
             # Have to do the role lookup _now_, as this is the only time
             # that we have the user's password/ldap bind..
             $self->roles($ldap);
         }
+        # Stash a closure which can be used to retrieve the connection in the users context later.
+        $self->_ldap_connection( sub { $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password ) } );
         return 1;
     }
     else {
