@@ -1,3 +1,7 @@
+0.1005  30 April 2009
+   - Stop throwing an exception when the lookup_user method fails
+      to find a user and instead return undef. (t0m)
+   - Add tests for above (t0m)
    - Change documentation which still refers to the old ::Plugin:: style
      auth system to use ->authenticate instead of ->login, and not say that
      you need to do things manually to have multiple stores. (t0m)

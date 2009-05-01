@@ -4,8 +4,9 @@ use strict;
 use warnings;
 use Catalyst::Exception;
 
-use Test::More tests => 7;
+use Test::More tests => 11;
 use Test::MockObject::Extends;
+use Test::Exception;
 use Net::LDAP::Entry;
 use lib 't/lib';
 
@@ -13,7 +14,7 @@ SKIP: {
 
     eval "use Catalyst::Model::LDAP";
     if ($@) {
-        skip "Catalyst::Model::LDAP not installed", 7;
+        skip "Catalyst::Model::LDAP not installed", 11;
     }
 
     use_ok("Catalyst::Authentication::Store::LDAP::Backend");
@@ -46,7 +47,8 @@ SKIP: {
         $ldap->mock('unbind' => sub {});
         $ldap->mock('disconnect' => sub {});
         my $search_res = Test::MockObject->new();
-        $search_res->mock(is_error => sub {}); # Never an error
+        my $search_is_error = 0;
+        $search_res->mock(is_error => sub { $search_is_error });
         $search_res->mock(entries => sub {
             return map 
                 {   my $id = $_; 
@@ -73,12 +75,21 @@ SKIP: {
         is_deeply( [sort $user->roles], 
                    [sort qw/quuxone quuxtwo/], 
                     "User has the expected set of roles" );
+
+        $search_is_error = 1;
+        lives_ok {
+            ok !$back->find_user( { username => 'doesnotexist' } ),
+                'Nonexistent user returns undef';
+        } 'No exception thrown for nonexistent user';
+
     }
     is_deeply(\@searches, [ 
         ['base', 'ou=foobar', 'filter', '(&(objectClass=inetOrgPerson)(uid=somebody))', 'scope', 'one'],
         ['base', 'ou=roles', 'filter', '(&(objectClass=posixGroup)(memberUid=test))', 'scope', 'one', 'attrs', [ 'userinrole' ]],
+        ['base', 'ou=foobar', 'filter', '(&(objectClass=inetOrgPerson)(uid=doesnotexist))', 'scope', 'one'],
         ['base', 'ou=foobar', 'filter', '(&(objectClass=inetOrgPerson)(uid=somebody))', 'scope', 'one'],
         ['base', 'ou=roles', 'filter', '(&(objectClass=posixGroup)(memberUid=test))', 'scope', 'one', 'attrs', [ 'userinrole' ]],
+        ['base', 'ou=foobar', 'filter', '(&(objectClass=inetOrgPerson)(uid=doesnotexist))', 'scope', 'one'],
     ], 'User searches as expected');
     is_deeply(\@binds, [
         [ undef ], # First user search
@@ -90,12 +101,14 @@ SKIP: {
         [
             undef
         ], # Rebind with initial credentials to find roles
+        [ undef ], # Second user search
         # 2nd pass round main loop
         [  undef ], # First user search
         [
             'ou=foobar',
             'password',
             'password'
-        ] # Rebind to confirm user _and_ lookup roles;
+        ], # Rebind to confirm user _and_ lookup roles;
+        [ undef ], # Second user search
     ], 'Binds as expected');
 }
