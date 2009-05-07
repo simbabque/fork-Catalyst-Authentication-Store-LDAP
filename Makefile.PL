@@ -1,4 +1,4 @@
-use inc::Module::Install;
+use inc::Module::Install 0.87;
 
 name('Catalyst-Authentication-Store-LDAP');
 abstract('Authenticate Users against LDAP Directories');
