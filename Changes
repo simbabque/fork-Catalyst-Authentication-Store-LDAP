@@ -1,3 +1,7 @@
+0.1006
+   - Pass $c along to find_user method so overridden user_class users can
+     get at models (or whatever crazy things they might do) (gphat)
+
 0.1005  30 April 2009
    - Stop throwing an exception when the lookup_user method fails
       to find a user and instead return undef. (t0m)
