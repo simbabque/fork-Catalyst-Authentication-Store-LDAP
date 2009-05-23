@@ -17,5 +17,7 @@ build_required('Test::Exception');
 
 auto_install();
 
+resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Authentication-Store-LDAP/trunk/';
+
 &WriteAll;
 
