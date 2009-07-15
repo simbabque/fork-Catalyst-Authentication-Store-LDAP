@@ -276,6 +276,8 @@ sub lookup_user {
     if ( $id =~ /\*/ ) {
         Catalyst::Exception->throw("ID $id contains wildcards!");
     }
+    # Trim trailing space or we confuse ourselves
+    $id =~ s/\s+$//;
     my $ldap = $self->ldap_bind;
     my @searchopts;
     if ( defined( $self->user_basedn ) ) {
