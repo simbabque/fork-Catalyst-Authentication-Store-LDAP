@@ -145,7 +145,9 @@ sub check_password {
             $self->roles($ldap);
         }
         # Stash a closure which can be used to retrieve the connection in the users context later.
-        $self->_ldap_connection( sub { $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password ) } );
+        $self->_ldap_connection( sub {
+            $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password )
+        });
         return 1;
     }
     else {
