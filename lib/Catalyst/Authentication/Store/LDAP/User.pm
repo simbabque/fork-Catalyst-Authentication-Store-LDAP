@@ -51,7 +51,7 @@ use warnings;
 
 our $VERSION = '0.1005';
 
-BEGIN { __PACKAGE__->mk_accessors(qw/user store _ldap_connection/) }
+BEGIN { __PACKAGE__->mk_accessors(qw/user store _ldap_connection_password/) }
 
 use overload '""' => sub { shift->stringify }, fallback => 1;
 
@@ -147,9 +147,9 @@ sub check_password {
             $self->roles($ldap);
         }
         # Stash a closure which can be used to retrieve the connection in the users context later.
-        $self->_ldap_connection( sub {
-            $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password )
-        });
+        $self->_ldap_connection_password( sub { $password } ); # Close over
+            # password to try to ensure it doesn't come out in debug dumps
+            # or get serialized into sessions etc..
         return 1;
     }
     else {
@@ -232,6 +232,22 @@ sub has_attribute {
     else {
         return undef;
     }
+}
+
+=head2 ldap_connection
+
+Re-binds to the auth store with the credentials of the user you logged in
+as, and returns a L<Net::LDAP> object which you can use to do further queries.
+
+=cut
+
+sub ldap_connection {
+    my $self = shift;
+    my $msg = $self->store->ldap_bind( undef, $self->ldap_entry->dn,
+        $self->_ldap_connection_password->() );
+    $msg->code && die("Error whilst re-binding as " . $self->ldap_entry->dn
+        . " after auth: " . $msg->error . " (" . $msg->code . ")");
+    return $self->store;
 }
 
 =head2 AUTOLOADed methods
