@@ -243,11 +243,8 @@ as, and returns a L<Net::LDAP> object which you can use to do further queries.
 
 sub ldap_connection {
     my $self = shift;
-    my $msg = $self->store->ldap_bind( undef, $self->ldap_entry->dn,
+    $self->store->ldap_bind( undef, $self->ldap_entry->dn,
         $self->_ldap_connection_password->() );
-    $msg->code && die("Error whilst re-binding as " . $self->ldap_entry->dn
-        . " after auth: " . $msg->error . " (" . $msg->code . ")");
-    return $self->store;
 }
 
 =head2 AUTOLOADed methods
