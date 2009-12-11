@@ -49,7 +49,7 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '0.1005';
+our $VERSION = '1.006';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store _ldap_connection_password/) }
 
