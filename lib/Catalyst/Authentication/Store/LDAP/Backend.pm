@@ -298,7 +298,7 @@ sub lookup_user {
     }
     my $usersearch = $ldap->search(@searchopts);
 
-    return if ( $usersearch->is_error );
+    return undef if ( $usersearch->is_error );
 
     my $userentry;
     my $user_field     = $self->user_field;
