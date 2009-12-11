@@ -1,6 +1,10 @@
 0.1006
    - Pass $c along to find_user method so overridden user_class users can
      get at models (or whatever crazy things they might do) (gphat)
+   - Add an ldap_connection method to the user class, which will return
+     an LDAP connection bound as the user who authenticated.
+   - Trim trailing whitespace from submitted usernames otherwise we generate
+     bad LDAP queries.
 
 0.1005  30 April 2009
    - Stop throwing an exception when the lookup_user method fails
