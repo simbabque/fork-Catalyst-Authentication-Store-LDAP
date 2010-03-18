@@ -1,3 +1,7 @@
+   - Store the user password for the ldap_connection method in an inside
+     out hash rather than a closure so that the user object can be serialized
+     with Storable as people are putting them in the session (RT#53279)
+
 0.1006  11 Dec 2009
    - Pass $c along to find_user method so overridden user_class users can
      get at models (or whatever crazy things they might do) (gphat)

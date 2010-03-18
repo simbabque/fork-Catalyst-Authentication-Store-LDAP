@@ -4,15 +4,17 @@ use strict;
 use warnings;
 use Catalyst::Exception;
 
-use Test::More tests => 5;
+use Test::More tests => 8;
 use lib 't/lib';
 use LDAPTest;
+use Storable qw/ freeze /;
+use Test::Exception;
 
 SKIP: {
 
     eval "use Catalyst::Model::LDAP";
     if ($@) {
-        skip "Catalyst::Model::LDAP not installed", 5;
+        skip "Catalyst::Model::LDAP not installed", 8;
     }
 
     my $server = LDAPTest::spawn_server();
@@ -40,4 +42,12 @@ SKIP: {
 
     is( $user->my_method, 'frobnitz', "methods on user class work" );
 
+    $server = LDAPTest::spawn_server();
+    ok $user->check_password('foo'), 'Can check password';
+
+    my $frozen_user;
+    lives_ok { $frozen_user = freeze $user } 'Can freeze user with Storable';
+    ok $frozen_user, 'is frozen';
+
 }
+

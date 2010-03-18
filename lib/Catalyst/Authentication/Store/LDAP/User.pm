@@ -48,12 +48,16 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 
 use strict;
 use warnings;
+use Scalar::Util qw/refaddr/;
 
 our $VERSION = '1.006';
 
-BEGIN { __PACKAGE__->mk_accessors(qw/user store _ldap_connection_password/) }
+BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
 use overload '""' => sub { shift->stringify }, fallback => 1;
+
+my %_ldap_connection_passwords; # Store inside-out so that they don't show up
+                                # in dumps..
 
 =head1 METHODS
 
@@ -147,9 +151,7 @@ sub check_password {
             $self->roles($ldap);
         }
         # Stash a closure which can be used to retrieve the connection in the users context later.
-        $self->_ldap_connection_password( sub { $password } ); # Close over
-            # password to try to ensure it doesn't come out in debug dumps
-            # or get serialized into sessions etc..
+        $_ldap_connection_passwords{refaddr($self)} = $password;
         return 1;
     }
     else {
@@ -244,7 +246,7 @@ as, and returns a L<Net::LDAP> object which you can use to do further queries.
 sub ldap_connection {
     my $self = shift;
     $self->store->ldap_bind( undef, $self->ldap_entry->dn,
-        $self->_ldap_connection_password->() );
+        $_ldap_connection_passwords{refaddr($self)} );
 }
 
 =head2 AUTOLOADed methods
@@ -285,6 +287,12 @@ value of user_field (uid by default.)
     $c->user->username == $c->user->uid
 
 =cut
+
+sub DESTROY {
+    my $self = shift;
+    # Don't leak passwords..
+    delete $_ldap_connection_passwords{refaddr($self)};
+}
 
 sub AUTOLOAD {
     my $self = shift;
