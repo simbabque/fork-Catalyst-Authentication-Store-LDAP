@@ -15,9 +15,12 @@ build_requires('Test::More');
 build_requires('Test::MockObject');
 build_required('Test::Exception');
 
-auto_install();
-
 resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Authentication-Store-LDAP/trunk/';
 
-&WriteAll;
+if ($Module::Install::AUTHOR) {
+    system("pod2text lib/Catalyst/Authentication/Store/LDAP.pm > README")
+        and die $!;
+}
+
+WriteAll;
 
