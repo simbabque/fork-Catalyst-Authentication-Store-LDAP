@@ -1,4 +1,4 @@
-1.008  xxx
+1.008  02 April 2010
    - Allow for multiple uid values on a User object. See RT
      https://rt.cpan.org/Ticket/Display.html?id=51505
      and patch from Andrew Kirkpatrick.
