@@ -1,9 +1,14 @@
-0.1007  19 Mar 2010
+1.008  xxx
+   - Allow for multiple uid values on a User object. See RT
+     https://rt.cpan.org/Ticket/Display.html?id=51505
+     and patch from Andrew Kirkpatrick.
+
+1.007  19 Mar 2010
    - Store the user password for the ldap_connection method in an inside
      out hash rather than a closure so that the user object can be serialized
      with Storable as people are putting them in the session (RT#53279)
 
-0.1006  11 Dec 2009
+1.006  11 Dec 2009
    - Pass $c along to find_user method so overridden user_class users can
      get at models (or whatever crazy things they might do) (gphat)
    - Add an ldap_connection method to the user class, which will return

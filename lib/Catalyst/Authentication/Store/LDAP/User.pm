@@ -50,7 +50,7 @@ use strict;
 use warnings;
 use Scalar::Util qw/refaddr/;
 
-our $VERSION = '1.007';
+our $VERSION = '1.008';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
@@ -111,8 +111,8 @@ sub stringify {
         return $string;
     }
     else {
-        my ($string) = $self->$userfield;
-        return $string;
+        my $val = $self->$userfield;
+        return ref($val) eq 'ARRAY' ? $val->[0] : $val;
     }
 }
 
