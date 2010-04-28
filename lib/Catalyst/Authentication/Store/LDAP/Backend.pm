@@ -72,7 +72,7 @@ use base qw( Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '1.008';
+our $VERSION = '1.009';
 
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;
@@ -145,7 +145,7 @@ sub find_user {
     return $self->get_user( $authinfo->{id} || $authinfo->{username}, $c );
 }
 
-=head2 get_user($id)
+=head2 get_user( I<id>, $c)
 
 Creates a L<Catalyst::Authentication::Store::LDAP::User> object
 for the given User ID, or calls C<new> on the class specified in
@@ -429,7 +429,7 @@ sub user_supports {
     Catalyst::Authentication::Store::LDAP::User->supports(@_);
 }
 
-=head2 from_session( I<id> )
+=head2 from_session( I<id>, I<$c> )
 
 Returns get_user() for I<id>.
 
@@ -437,7 +437,7 @@ Returns get_user() for I<id>.
 
 sub from_session {
     my ( $self, $c, $id ) = @_;
-    $self->get_user($id);
+    $self->get_user($id, $c);
 }
 
 1;
