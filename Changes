@@ -1,4 +1,4 @@
-1.009  xxx
+1.009  15 May 2010
    - Fix pod for get_user() and from_session() in Backend.pm, adding
      the missing $c param. Pass $c in from_session() through to get_user().
      Reported in https://rt.cpan.org/Ticket/Display.html?id=56983 with

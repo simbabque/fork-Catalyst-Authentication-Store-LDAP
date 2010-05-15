@@ -13,7 +13,7 @@ requires( 'Catalyst::Plugin::Authentication' => '0.10003' );
 build_requires('Net::LDAP::Server::Test' => '0.07');
 build_requires('Test::More');
 build_requires('Test::MockObject');
-build_required('Test::Exception');
+build_requires('Test::Exception');
 
 resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Authentication-Store-LDAP/trunk/';
 

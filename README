@@ -131,7 +131,7 @@ CONFIGURATION OPTIONS
 
         user_basedn: ou=Domain Users,ou=Accounts,dc=mycompany,dc=com
         user_field:  samaccountname
-        user_filter: (sAMAccountName=%s) 
+        user_filter: (sAMAccountName=%s)
 
     He also notes: "I found the case in the value of user_field to be
     significant: it didn't seem to work when I had the mixed case value
@@ -220,7 +220,7 @@ CONFIGURATION OPTIONS
                               }
                               return undef; # i.e., no match
                             }
- 
+
   use_roles
     Whether or not to enable role lookups. It defaults to true; set it to 0
     if you want to always avoid role lookups.
