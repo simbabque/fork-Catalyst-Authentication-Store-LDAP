@@ -1,5 +1,5 @@
-has_attribute has a special case for 'dn' using the underlying ldap_entry
 
+1.010  6 July 201
   - Make AUTOLOAD method work for ->dn by generically calling has_attribute
     which has a special case for it.
   - Unify the handling of the ->username method between AUTOLOAD and
