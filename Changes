@@ -1,3 +1,11 @@
+has_attribute has a special case for 'dn' using the underlying ldap_entry
+
+  - Make AUTOLOAD method work for ->dn by generically calling has_attribute
+    which has a special case for it.
+  - Unify the handling of the ->username method between AUTOLOAD and
+    has_attribute by special casing it more generically in has_attribute.
+    Both RT#57610, patch and tests by Jason Fried
+
 1.009  15 May 2010
    - Fix pod for get_user() and from_session() in Backend.pm, adding
      the missing $c param. Pass $c in from_session() through to get_user().

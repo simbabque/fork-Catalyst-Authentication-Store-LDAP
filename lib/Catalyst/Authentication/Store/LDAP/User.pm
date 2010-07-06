@@ -228,6 +228,9 @@ sub has_attribute {
     if ( $attribute eq "dn" ) {
         return $self->ldap_entry->dn;
     }
+    elsif ( $attribute eq "username" ) {
+       return $self->user->{'attributes'}->{$self->store->user_field};
+    }
     elsif ( exists( $self->user->{'attributes'}->{$attribute} ) ) {
         return $self->user->{'attributes'}->{$attribute};
     }
@@ -302,20 +305,9 @@ sub AUTOLOAD {
     if ( $method eq "DESTROY" ) {
         return;
     }
-    if ( exists( $self->user->{'attributes'}->{$method} ) ) {
-        return $self->user->{'attributes'}->{$method};
-    }
-    elsif ( $method eq "username" ) {
-        my $userfield = $self->store->user_field;
-        my $username  = $self->has_attribute($userfield);
-        if ($username) {
-            return $username;
-        }
-        else {
-            Catalyst::Exception->throw( "User is missing the "
-                    . $userfield
-                    . " attribute, which should not be possible!" );
-        }
+
+    if ( my $attribute = $self->has_attribute($method) ) {
+        return $attribute;
     }
     else {
         Catalyst::Exception->throw(
