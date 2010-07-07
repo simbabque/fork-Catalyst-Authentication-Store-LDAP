@@ -1,3 +1,6 @@
+1.011  xxx
+  - fix t/05-user_attributes.t to skip correct number of tests if 
+    Catalyst::Model::LDAP is not installed.
 
 1.010  6 July 201
   - Make AUTOLOAD method work for ->dn by generically calling has_attribute

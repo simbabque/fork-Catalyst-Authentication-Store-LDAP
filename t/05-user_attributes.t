@@ -12,7 +12,7 @@ SKIP: {
 
     eval "use Catalyst::Model::LDAP";
     if ($@) {
-        skip "Catalyst::Model::LDAP not installed", 6;
+        skip "Catalyst::Model::LDAP not installed", 9;
     }
 
     my $server = LDAPTest::spawn_server();
