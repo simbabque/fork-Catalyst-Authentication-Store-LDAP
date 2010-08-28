@@ -3,7 +3,7 @@ package Catalyst::Authentication::Store::LDAP;
 use strict;
 use warnings;
 
-our $VERSION = '1.011';
+our $VERSION = '1.012';
 
 use Catalyst::Authentication::Store::LDAP::Backend;
 
@@ -60,7 +60,7 @@ Catalyst::Authentication::Store::LDAP
                user_basedn         => "ou=people,dc=yourcompany,dc=com",
                user_field          => "uid",
                user_filter         => "(&(objectClass=posixAccount)(uid=%s))",
-               user_scope          => "one",
+               user_scope          => "one", # or "sub" for Active Directory
                user_search_options => { deref => "always" },
                user_results_filter => sub { return shift->pop_entry },
              },
@@ -156,6 +156,7 @@ tweeks to the example configuration will work:
     user_basedn: ou=Domain Users,ou=Accounts,dc=mycompany,dc=com
     user_field:  samaccountname
     user_filter: (sAMAccountName=%s) 
+    user_scope: sub
 
 He also notes: "I found the case in the value of user_field to be significant: 
 it didn't seem to work when I had the mixed case value there."

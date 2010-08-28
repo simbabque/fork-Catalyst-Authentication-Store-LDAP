@@ -1,3 +1,10 @@
+1.012  xxx
+  - add methods conforming to the Catalyst::Authentication::User API
+    as required here: 
+    http://search.cpan.org/dist/Catalyst-Plugin-Authentication/lib/Catalyst/Plugin/Authentication/Internals.pod#USER_METHODS
+    Nudging provided via RT https://rt.cpan.org/Ticket/Display.html?id=60793
+  - add documentation for Active Directory at suggestion of Adam Wohld
+
 1.011  7 July 2010
   - fix t/05-user_attributes.t to skip correct number of tests if
     Catalyst::Model::LDAP is not installed.

@@ -31,7 +31,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             },
             'user_basedn' => 'ou=people,dc=yourcompany,dc=com',
             'user_filter' => '(&(objectClass=posixAccount)(uid=%s))',
-            'user_scope' => 'one',
+            'user_scope' => 'one',  # or 'sub' for Active Directory
             'user_field' => 'uid',
             'user_search_options' => {
                 'deref' => 'always',
@@ -72,7 +72,7 @@ use base qw( Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '1.011';
+our $VERSION = '1.012';
 
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;

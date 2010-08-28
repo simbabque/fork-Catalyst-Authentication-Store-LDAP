@@ -50,7 +50,7 @@ use strict;
 use warnings;
 use Scalar::Util qw/refaddr/;
 
-our $VERSION = '1.011';
+our $VERSION = '1.012';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
@@ -238,6 +238,23 @@ sub has_attribute {
         return undef;
     }
 }
+
+=head2 get
+
+A simple wrapper around has_attribute() to satisfy the Catalyst::Authentication::User API.
+
+=cut
+
+sub get { return shift->has_attribute(@_) }
+
+=head2 get_object
+
+Satisfies the Catalyst::Authentication::User API and returns the contents of the user()
+attribute.
+
+=cut
+
+sub get_object { return shift->user }
 
 =head2 ldap_connection
 
