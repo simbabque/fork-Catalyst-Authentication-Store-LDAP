@@ -314,6 +314,15 @@ sub DESTROY {
     delete $_ldap_connection_passwords{refaddr($self)};
 }
 
+sub can {
+    my ($self, $method) = @_;
+
+    return $self->SUPER::can($method) || do {
+        return unless $self->has_attribute($method);
+        return sub { $_[0]->has_attribute($method) };
+    };
+}
+
 sub AUTOLOAD {
     my $self = shift;
 
