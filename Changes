@@ -1,6 +1,6 @@
-1.012  xxx
+1.012  5 October 2010
   - add methods conforming to the Catalyst::Authentication::User API
-    as required here: 
+    as required here:
     http://search.cpan.org/dist/Catalyst-Plugin-Authentication/lib/Catalyst/Plugin/Authentication/Internals.pod#USER_METHODS
     Nudging provided via RT https://rt.cpan.org/Ticket/Display.html?id=60793
   - add documentation for Active Directory at suggestion of Adam Wohld
