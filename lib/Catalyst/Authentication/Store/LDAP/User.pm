@@ -50,7 +50,7 @@ use strict;
 use warnings;
 use Scalar::Util qw/refaddr/;
 
-our $VERSION = '1.012';
+our $VERSION = '1.013';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
