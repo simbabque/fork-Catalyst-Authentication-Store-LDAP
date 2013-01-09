@@ -214,8 +214,14 @@ sub ldap_bind {
     if ( !defined($ldap) ) {
         Catalyst::Exception->throw("LDAP Server undefined!");
     }
-    $binddn ||= $self->binddn;
-    $bindpw ||= $self->bindpw;
+
+    # if username is present, make sure password is present too.
+    # see https://rt.cpan.org/Ticket/Display.html?id=81908
+    if ( !defined $binddn ) {
+        $binddn = $self->binddn;
+        $bindpw = $self->bindpw;
+    }
+
     if ( $binddn eq "anonymous" ) {
         $self->_ldap_bind_anon($ldap);
     }
