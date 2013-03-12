@@ -42,12 +42,20 @@ SKIP: {
 
     is( $user->my_method, 'frobnitz', "methods on user class work" );
 
+    # RT 69615
+    diag("stop() server");
+    $server->stop();
+
     $server = LDAPTest::spawn_server();
     ok $user->check_password('foo'), 'Can check password';
 
     my $frozen_user;
     lives_ok { $frozen_user = freeze $user } 'Can freeze user with Storable';
     ok $frozen_user, 'is frozen';
+
+    # RT 69615
+    diag("stop() server");
+    $server->stop();
 
 }
 
