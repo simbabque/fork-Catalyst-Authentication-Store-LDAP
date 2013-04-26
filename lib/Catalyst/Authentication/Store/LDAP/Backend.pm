@@ -72,7 +72,7 @@ use base qw( Class::Accessor::Fast );
 use strict;
 use warnings;
 
-our $VERSION = '1.013';
+our $VERSION = '1.014';
 
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;
