@@ -226,7 +226,8 @@ sub ldap_bind {
         $self->_ldap_bind_anon($ldap);
     }
     else {
-        if ($bindpw) {
+        # Don't fall back to unauthenticated bind when authenticating
+        if ($bindpw or $forauth eq 'forauth') {
             my $mesg = $ldap->bind( $binddn, 'password' => $bindpw );
             if ( $mesg->is_error ) {
 

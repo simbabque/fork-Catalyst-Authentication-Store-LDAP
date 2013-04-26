@@ -1,3 +1,5 @@
+  - Don't fall back to unauthenticated bind when authenticating
+
 1.013  9 January 2013
   - fix for https://rt.cpan.org/Ticket/Display.html?id=81908 security hole.
 
