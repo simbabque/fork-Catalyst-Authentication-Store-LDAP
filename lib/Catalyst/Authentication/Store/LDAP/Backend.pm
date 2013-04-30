@@ -208,8 +208,7 @@ If $binddn is "anonymous", an anonymous bind will be performed.
 =cut
 
 sub ldap_bind {
-    my ( $self, $ldap, $binddn, $bindpw, $forauth ) = @_;
-    $forauth ||= 0;
+    my ( $self, $ldap, $binddn, $bindpw ) = @_;
     $ldap ||= $self->ldap_connect;
     if ( !defined($ldap) ) {
         Catalyst::Exception->throw("LDAP Server undefined!");
@@ -226,20 +225,11 @@ sub ldap_bind {
         $self->_ldap_bind_anon($ldap);
     }
     else {
-        # Don't fall back to unauthenticated bind when authenticating
-        if ($bindpw or $forauth eq 'forauth') {
+        if ($bindpw) {
             my $mesg = $ldap->bind( $binddn, 'password' => $bindpw );
             if ( $mesg->is_error ) {
-
-                # If we're not checking this bind for authentication purposes
-                # Go ahead an blow up if we fail.
-                if ( $forauth ne 'forauth' ) {
-                    Catalyst::Exception->throw(
-                        "Error on Initial Bind: " . $mesg->error );
-                }
-                else {
-                    return undef;
-                }
+                Catalyst::Exception->throw(
+                    "Error on Initial Bind: " . $mesg->error );
             }
         }
         else {
@@ -255,6 +245,24 @@ sub _ldap_bind_anon {
     if ( $mesg->is_error ) {
         Catalyst::Exception->throw( "Error on Bind: " . $mesg->error );
     }
+}
+
+=head2 ldap_auth( $binddn, $bindpw )
+
+Connect to the LDAP server and do an authenticated bind against the
+directory. Throws an exception if connecting to the LDAP server fails.
+Returns 1 if binding succeeds, 0 if it fails.
+
+=cut
+
+sub ldap_auth {
+    my ( $self, $binddn, $bindpw ) = @_;
+    my $ldap = $self->ldap_connect;
+    if ( !defined $ldap ) {
+        Catalyst::Exception->throw("LDAP server undefined!");
+    }
+    my $mesg = $ldap->bind( $binddn, password => $bindpw );
+    return $mesg->is_error ? 0 : 1;
 }
 
 =head2 lookup_user($id)

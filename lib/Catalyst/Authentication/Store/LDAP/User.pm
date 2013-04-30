@@ -140,10 +140,7 @@ bind, 0 on failure.
 
 sub check_password {
     my ( $self, $password ) = @_;
-    my $ldap
-        = $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password,
-        'forauth' );
-    if ( defined($ldap) ) {
+    if ( $self->store->ldap_auth($self->ldap_entry->dn, $password) ) {
         # Stash a closure which can be used to retrieve the connection in the users context later.
         $_ldap_connection_passwords{refaddr($self)} = $password;
         return 1;
