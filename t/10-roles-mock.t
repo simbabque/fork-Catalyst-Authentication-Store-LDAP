@@ -104,7 +104,12 @@ is_deeply(\@binds, [
         'ou=foobar',
         'password',
         'password'
-    ], # Rebind to confirm user _and_ lookup roles;
+    ], # Rebind to confirm user
+    [
+        'ou=foobar',
+        'password',
+        'password'
+    ], # Rebind with user credentials to find roles
     [ undef ], # Second user search
 ], 'Binds as expected');
 

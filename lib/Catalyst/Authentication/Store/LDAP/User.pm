@@ -144,12 +144,6 @@ sub check_password {
         = $self->store->ldap_bind( undef, $self->ldap_entry->dn, $password,
         'forauth' );
     if ( defined($ldap) ) {
-        if ($self->store->role_search_as_user) {
-            # FIXME - This can be removed and made to use the code below..
-            # Have to do the role lookup _now_, as this is the only time
-            # that we have the user's password/ldap bind..
-            $self->roles($ldap);
-        }
         # Stash a closure which can be used to retrieve the connection in the users context later.
         $_ldap_connection_passwords{refaddr($self)} = $password;
         return 1;
@@ -167,8 +161,7 @@ Returns the results of L<Catalyst::Authentication::Store::LDAP::Backend>'s "look
 
 sub roles {
     my $self = shift;
-    my $ldap = shift;
-    $self->{_roles} ||= [$self->store->lookup_roles($self, $ldap)];
+    $self->{_roles} ||= [$self->store->lookup_roles($self)];
     return @{$self->{_roles}};
 }
 

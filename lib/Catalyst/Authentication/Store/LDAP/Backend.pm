@@ -378,7 +378,8 @@ sub lookup_roles {
     if ( $self->use_roles == 0 || $self->use_roles =~ /^false$/i ) {
         return undef;
     }
-    $ldap ||= $self->ldap_bind;
+    $ldap ||= $self->role_search_as_user
+        ? $userobj->ldap_connection : $self->ldap_bind;
     my @searchopts;
     if ( defined( $self->role_basedn ) ) {
         push( @searchopts, 'base' => $self->role_basedn );
