@@ -23,4 +23,4 @@ ok(my $meth = $o->can('exists'), 'can returns true');
 
 is($o->$meth, $message, 'can returns right coderef');
 
-done_testing;;
+done_testing;

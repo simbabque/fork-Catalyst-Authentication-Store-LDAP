@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Catalyst::Exception;
 
-use Test::More tests => 4;
+use Test::More;
 
 use lib 't/lib';
 use LDAPTest;
@@ -35,3 +35,4 @@ isa_ok( $back, "Catalyst::Authentication::Store::LDAP::Backend" );
 ok( my $user_mixed = $back->find_user( { username => 'SOmeBOdy' } ), "find_user (mixed case)" );
 isa_ok( $user_mixed, "Catalyst::Authentication::Store::LDAP::User" );
 
+done_testing;
