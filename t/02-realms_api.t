@@ -29,10 +29,20 @@ my $back = Catalyst::Authentication::Store::LDAP::Backend->new(
     }
 );
 
-isa_ok( $back, "Catalyst::Authentication::Store::LDAP::Backend" );
-ok( my $user = $back->find_user( { username => 'somebody' } ), "find_user" );
-isa_ok( $user, "Catalyst::Authentication::Store::LDAP::User" );
-my $displayname = $user->displayname;
-cmp_ok( $displayname, 'eq', 'Some Body', 'Should be Some Body' );
+isa_ok( $back, "Catalyst::Authentication::Store::LDAP::Backend", 'LDAP backed' );
+
+foreach (
+    ['somebody', 'Some Body'],
+    ['sunnO)))', 'Sunn O)))'],
+    ['some*',    'Some Star'],
+) {
+    my ($username, $name) = @$_;
+
+    my $user = $back->find_user( { username => $username } );
+    isa_ok( $user, "Catalyst::Authentication::Store::LDAP::User", "find_user('$username') result" );
+    my $displayname = $user->displayname;
+    is( $displayname, $name, 'Display name' );
+
+}
 
 done_testing;

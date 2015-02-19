@@ -282,11 +282,6 @@ This method is usually only called by find_user().
 sub lookup_user {
     my ( $self, $id ) = @_;
 
-    # No sneaking in wildcards!
-    if ( $id =~ /\*/ ) {
-        Catalyst::Exception->throw("ID $id contains wildcards!");
-    }
-
     # Trim trailing space or we confuse ourselves
     $id =~ s/\s+$//;
     my $ldap = $self->ldap_bind;
@@ -419,6 +414,7 @@ sub _replace_filter {
     my $self    = shift;
     my $filter  = shift;
     my $replace = shift;
+    $replace =~ s/([*()\\\x{0}])/sprintf '\\%02x', ord($1)/ge;
     $filter =~ s/\%s/$replace/g;
     return $filter;
 }

@@ -1,3 +1,5 @@
+  - Escape special characters in user/role names
+
 1.014 26 April 2013
   - Don't fall back to unauthenticated bind when authenticating
 
