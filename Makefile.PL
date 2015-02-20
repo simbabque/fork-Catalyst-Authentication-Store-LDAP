@@ -15,7 +15,7 @@ build_requires('Test::More');
 build_requires('Test::MockObject');
 build_requires('Test::Exception');
 
-resources repository => 'http://dev.catalyst.perl.org/repos/Catalyst/Catalyst-Authentication-Store-LDAP/trunk/';
+resources repository => 'git://git.shadowcat.co.uk/catagits/Catalyst-Authentication-Store-LDAP.git';
 
 if ($Module::Install::AUTHOR) {
     system("pod2text lib/Catalyst/Authentication/Store/LDAP.pm > README")
