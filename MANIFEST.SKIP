@@ -1,8 +1,10 @@
 ^Makefile.old$
 ^Catalyst-
-.svn
+^\.git/
 ^Makefile$
 ^blib/
 ^.*\.swp$
 ^MANIFEST\.
 ^pm_to_blib$
+^MYMETA\.
+~$
