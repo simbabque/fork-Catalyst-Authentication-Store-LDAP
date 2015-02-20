@@ -1,3 +1,4 @@
+1.015 20 February 2015
   - Escape special characters in user/role names
   - Use the stored user credentials to look up roles
   - Split credential checking into a separate method from generic binding
