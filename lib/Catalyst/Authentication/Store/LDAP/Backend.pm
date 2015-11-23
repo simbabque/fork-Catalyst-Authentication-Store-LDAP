@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-Catalyst::Authentication::Store::LDAP::Backend 
+Catalyst::Authentication::Store::LDAP::Backend
   - LDAP authentication storage backend.
 
 =head1 SYNOPSIS
@@ -51,7 +51,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             },
             'role_search_as_user' => 0,
     );
-    
+
     our $users = Catalyst::Authentication::Store::LDAP::Backend->new(\%config);
 
 =head1 DESCRIPTION
@@ -134,7 +134,7 @@ sub new {
 =head2 find_user( I<authinfo>, $c )
 
 Creates a L<Catalyst::Authentication::Store::LDAP::User> object
-for the given User ID.  This is the preferred mechanism for getting a 
+for the given User ID.  This is the preferred mechanism for getting a
 given User out of the Store.
 
 I<authinfo> should be a hashref with a key of either C<id> or
@@ -372,7 +372,7 @@ sub lookup_user {
 
 =head2 lookup_roles($userobj, [$ldap])
 
-This method looks up the roles for a given user.  It takes a 
+This method looks up the roles for a given user.  It takes a
 L<Catalyst::Authentication::Store::LDAP::User> object
 as it's first argument, and can optionally take a I<Net::LDAP> object which
 is used rather than the default binding if supplied.
@@ -431,7 +431,7 @@ sub _replace_filter {
 
 =head2 user_supports
 
-Returns the value of 
+Returns the value of
 Catalyst::Authentication::Store::LDAP::User->supports(@_).
 
 =cut
