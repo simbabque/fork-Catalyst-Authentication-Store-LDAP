@@ -1,3 +1,5 @@
+  - Document how to limit the attributes returned from the LDAP search
+
 1.015 20 February 2015
   - Escape special characters in user/role names
   - Use the stored user credentials to look up roles

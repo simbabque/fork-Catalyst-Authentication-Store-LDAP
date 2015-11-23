@@ -35,6 +35,7 @@ Catalyst::Authentication::Store::LDAP::Backend
             'user_field' => 'uid',
             'user_search_options' => {
                 'deref' => 'always',
+                'attrs' => [qw( distinguishedname name mail )],
             },
             'user_results_filter' => sub { return shift->pop_entry },
             'entry_class' => 'MyApp::LDAP::Entry',

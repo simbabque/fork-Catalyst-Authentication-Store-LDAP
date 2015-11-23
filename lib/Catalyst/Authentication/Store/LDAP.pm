@@ -61,7 +61,10 @@ Catalyst::Authentication::Store::LDAP
                user_field          => "uid",
                user_filter         => "(&(objectClass=posixAccount)(uid=%s))",
                user_scope          => "one", # or "sub" for Active Directory
-               user_search_options => { deref => "always" },
+               user_search_options => {
+                 deref => 'always',
+                 attrs => [qw( distinguishedname name mail )],
+               },
                user_results_filter => sub { return shift->pop_entry },
              },
            },
