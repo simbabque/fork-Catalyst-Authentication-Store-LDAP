@@ -316,9 +316,9 @@ performed when bound as the user you authenticated as.
 
 =head2 persist_in_session
 
-Can take one of the following values, defaults to undefined:
+Can take one of the following values, defaults to I<username>:
 
-=head3 undefined
+=head3 username
 
 Only store the username in the session and lookup the user and its roles
 on every request. That was how the module worked until version 1.015 and is

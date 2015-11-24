@@ -126,6 +126,7 @@ sub new {
     $config_hash{'user_class'}
         ||= 'Catalyst::Authentication::Store::LDAP::User';
     $config_hash{'role_search_as_user'} ||= 0;
+    $config_hash{'persist_in_session'}  ||= 'username';
 
     Catalyst::Utils::ensure_class_loaded( $config_hash{'user_class'} );
     my $self = \%config_hash;
