@@ -127,6 +127,8 @@ sub new {
         ||= 'Catalyst::Authentication::Store::LDAP::User';
     $config_hash{'role_search_as_user'} ||= 0;
     $config_hash{'persist_in_session'}  ||= 'username';
+    Catalyst::Exception->throw('persist_in_session must be either username or all')
+        unless $config_hash{'persist_in_session'} =~ /\A(?:username|all)\z/;
 
     Catalyst::Utils::ensure_class_loaded( $config_hash{'user_class'} );
     my $self = \%config_hash;
