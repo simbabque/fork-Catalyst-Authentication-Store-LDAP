@@ -38,7 +38,10 @@ SYNOPSIS
                    user_field          => "uid",
                    user_filter         => "(&(objectClass=posixAccount)(uid=%s))",
                    user_scope          => "one", # or "sub" for Active Directory
-                   user_search_options => { deref => "always" },
+                   user_search_options => {
+                     deref => 'always',
+                     attrs => [qw( distinguishedname name mail )],
+                   },
                    user_results_filter => sub { return shift->pop_entry },
                  },
                },
@@ -50,8 +53,8 @@ SYNOPSIS
             my ( $self, $c ) = @_;
 
             $c->authenticate({
-                              id          => $c->req->param("login"), 
-                              password    => $c->req->param("password") 
+                              id          => $c->req->param("login"),
+                              password    => $c->req->param("password")
                              });
             $c->res->body("Welcome " . $c->user->username . "!");
         }
@@ -131,7 +134,7 @@ CONFIGURATION OPTIONS
 
         user_basedn: ou=Domain Users,ou=Accounts,dc=mycompany,dc=com
         user_field:  samaccountname
-        user_filter: (sAMAccountName=%s) 
+        user_filter: (sAMAccountName=%s)
         user_scope: sub
 
     He also notes: "I found the case in the value of user_field to be
