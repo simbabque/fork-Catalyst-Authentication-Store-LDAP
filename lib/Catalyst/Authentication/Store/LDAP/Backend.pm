@@ -50,6 +50,7 @@ Catalyst::Authentication::Store::LDAP::Backend
                 'deref' => 'always',
             },
             'role_search_as_user' => 0,
+            'persist_in_session'  => 'all',
     );
 
     our $users = Catalyst::Authentication::Store::LDAP::Backend->new(\%config);
@@ -88,6 +89,7 @@ BEGIN {
             role_filter role_scope role_field role_value
             role_search_options start_tls start_tls_options
             user_results_filter user_class role_search_as_user
+            persist_in_session
             )
     );
 }
@@ -450,8 +452,13 @@ Returns get_user() for I<id>.
 =cut
 
 sub from_session {
-    my ( $self, $c, $id ) = @_;
-    $self->get_user( $id, $c );
+    my ( $self, $c, $frozenuser ) = @_;
+
+    if ( $self->persist_in_session eq 'all' ) {
+        return $self->user_class->new( $self, $frozenuser->{user}, $c, $frozenuser->{_roles} );
+    }
+
+    return $self->get_user( $frozenuser, $c );
 }
 
 1;

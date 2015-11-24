@@ -66,6 +66,7 @@ Catalyst::Authentication::Store::LDAP
                  attrs => [qw( distinguishedname name mail )],
                },
                user_results_filter => sub { return shift->pop_entry },
+               persist_in_session  => 'all',
              },
            },
          },
@@ -312,6 +313,24 @@ By default this setting is false, and the role search will be performed
 by binding to the directory with the details in the I<binddn> and I<bindpw>
 fields. If this is set to false, then the role search will instead be
 performed when bound as the user you authenticated as.
+
+=head2 persist_in_session
+
+Can take one of the following values, defaults to undefined:
+
+=head3 undefined
+
+Only store the username in the session and lookup the user and its roles
+on every request. That was how the module worked until version 1.015 and is
+also the default for backwards compatibility.
+
+=head3 all
+
+Store the user object and its roles in the session and never look it up in
+the store after login.
+
+B<NOTE:> It's recommended to limit the user attributes fetched from LDAP
+using L<user_search_options> / attrs to not exhaust the session store..
 
 =head2 entry_class
 

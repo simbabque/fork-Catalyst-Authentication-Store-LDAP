@@ -74,11 +74,11 @@ Returns a L<Catalyst::Authentication::Store::LDAP::User> object.
 =cut
 
 sub new {
-    my ( $class, $store, $user, $c ) = @_;
+    my ( $class, $store, $user, $c, $roles ) = @_;
 
     return unless $user;
 
-    bless { store => $store, user => $user, }, $class;
+    bless { store => $store, user => $user, _roles => $roles }, $class;
 }
 
 =head2 id
@@ -164,12 +164,19 @@ sub roles {
 
 =head2 for_session
 
-Returns the User object, stringified.
+Returns the user for persistence in the session depending on the
+persist_in_session config option.
 
 =cut
 
 sub for_session {
     my $self = shift;
+
+    if ( $self->store->persist_in_session eq 'all' ) {
+        # use the roles accessor to ensure the roles are fetched
+        return { user => $self->user, _roles => [ $self->roles ] };
+    }
+
     return $self->stringify;
 }
 

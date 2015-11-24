@@ -43,6 +43,7 @@ SYNOPSIS
                      attrs => [qw( distinguishedname name mail )],
                    },
                    user_results_filter => sub { return shift->pop_entry },
+                   persist_in_session  => 'all',
                  },
                },
              },
@@ -272,6 +273,21 @@ CONFIGURATION OPTIONS
     by binding to the directory with the details in the *binddn* and
     *bindpw* fields. If this is set to false, then the role search will
     instead be performed when bound as the user you authenticated as.
+
+  persist_in_session
+    Can take one of the following values, defaults to undefined:
+
+   undefined
+    Only store the username in the session and lookup the user and its roles
+    on every request. That was how the module worked until version 1.015 and
+    is also the default for backwards compatibility.
+
+   all
+    Store the user object and its roles in the session and never look it up
+    in the store after login.
+
+    NOTE: It's recommended to limit the user attributes fetched from LDAP
+    using user_search_options / attrs to not exhaust the session store..
 
   entry_class
     The name of the class of LDAP entries returned. This class should exist
