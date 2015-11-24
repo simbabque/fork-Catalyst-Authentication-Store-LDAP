@@ -49,6 +49,7 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 use strict;
 use warnings;
 use Scalar::Util qw/refaddr/;
+use Net::LDAP::Entry;
 
 our $VERSION = '1.015';
 
