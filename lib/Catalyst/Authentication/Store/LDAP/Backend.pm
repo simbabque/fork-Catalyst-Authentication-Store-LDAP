@@ -452,13 +452,21 @@ sub user_supports {
 
 Revives a serialized user from storage in the session.
 
+Supports users stored with a different persist_in_session setting.
+
 =cut
 
 sub from_session {
     my ( $self, $c, $frozenuser ) = @_;
 
-    if ( $self->persist_in_session eq 'all' ) {
-        return $self->user_class->new( $self, $frozenuser->{user}, $c, $frozenuser->{_roles} );
+    # we need to restore the user depending on the current storage of the
+    # user in the session store which might differ from what
+    # persist_in_session is set to now
+    if ( ref $frozenuser eq 'HASH' ) {
+        # we can rely on the existance of this key if the user is a hashref
+        if ( $frozenuser->{persist_in_session} eq 'all' ) {
+            return $self->user_class->new( $self, $frozenuser->{user}, $c, $frozenuser->{_roles} );
+        }
     }
 
     return $self->get_user( $frozenuser, $c );

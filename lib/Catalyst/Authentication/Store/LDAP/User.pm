@@ -168,6 +168,9 @@ sub roles {
 Returns the user for persistence in the session depending on the
 persist_in_session config option.
 
+Stores the persist_in_session setting so it can be used to revive the user
+even if the setting has been changed.
+
 =cut
 
 sub for_session {
@@ -175,7 +178,13 @@ sub for_session {
 
     if ( $self->store->persist_in_session eq 'all' ) {
         # use the roles accessor to ensure the roles are fetched
-        return { user => $self->user, _roles => [ $self->roles ] };
+        return {
+            # store the persistance setting in the session to know how to
+            # restore the user
+            persist_in_session  => $self->store->persist_in_session,
+            user                => $self->user,
+            _roles              => [ $self->roles ],
+        };
     }
 
     return $self->stringify;
