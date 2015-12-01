@@ -448,9 +448,9 @@ sub user_supports {
     Catalyst::Authentication::Store::LDAP::User->supports(@_);
 }
 
-=head2 from_session( I<id>, I<$c> )
+=head2 from_session( I<id>, I<$c>, $frozenuser )
 
-Returns get_user() for I<id>.
+Revives a serialized user from storage in the session.
 
 =cut
 
