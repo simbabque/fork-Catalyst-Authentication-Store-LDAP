@@ -19,6 +19,8 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Catalyst::Authentication::Store::LDAP
@@ -352,11 +354,13 @@ L<Catalyst::Plugin::Authentication/default_auth_store> with this object.
 =head1 AUTHORS
 
 Adam Jacob <holoway@cpan.org>
+Peter Karman <karman@cpan.org>
+Alexander Hartmaier <abraxxa@cpan.org>
 
 Some parts stolen shamelessly and entirely from
 L<Catalyst::Plugin::Authentication::Store::Htpasswd>.
 
-Currently maintained by Peter Karman <karman@cpan.org>.
+Currently maintained by Dagfinn Ilmari Mannsåker <ilmari@cpan.org>.
 
 =head1 THANKS
 
