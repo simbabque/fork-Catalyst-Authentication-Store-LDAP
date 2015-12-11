@@ -79,6 +79,7 @@ our $VERSION = '1.015';
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;
 use Catalyst::Utils ();
+use Catalyst::Exception;
 
 BEGIN {
     __PACKAGE__->mk_accessors(

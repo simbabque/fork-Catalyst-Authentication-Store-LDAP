@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use Catalyst::Exception;
 
 use Test::More;
 use lib 't/lib';
