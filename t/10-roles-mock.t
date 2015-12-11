@@ -9,9 +9,6 @@ use Test::Exception;
 use Net::LDAP::Entry;
 use lib 't/lib';
 
-eval "use Catalyst::Model::LDAP";
-plan skip_all => "Catalyst::Model::LDAP not installed" if $@;
-
 use_ok("Catalyst::Authentication::Store::LDAP::Backend");
 
 

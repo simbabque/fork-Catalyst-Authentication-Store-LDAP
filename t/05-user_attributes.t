@@ -7,9 +7,6 @@ use Test::More;
 use lib 't/lib';
 use LDAPTest;
 
-eval "use Catalyst::Model::LDAP";
-plan skip_all => "Catalyst::Model::LDAP not installed" if $@;
-
 my $server = LDAPTest::spawn_server();
 
 use_ok("Catalyst::Authentication::Store::LDAP::Backend");
