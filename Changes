@@ -1,6 +1,7 @@
   - Document how to limit the attributes returned from the LDAP search
   - Add persist_in_session config option to allow storing of user and its
     roles in the session without hitting the LDAP store on each request
+  - fix use_roles enabled if explicitly disabled
 
 1.015 20 February 2015
   - Escape special characters in user/role names

@@ -120,7 +120,8 @@ sub new {
     $config_hash{'role_filter'} ||= '(memberUid=%s)';
     $config_hash{'role_scope'}  ||= 'sub';
     $config_hash{'role_field'}  ||= 'cn';
-    $config_hash{'use_roles'}   ||= '1';
+    $config_hash{'use_roles'}   = '1'
+        unless exists $config_hash{use_roles};
     $config_hash{'start_tls'}   ||= '0';
     $config_hash{'entry_class'} ||= 'Catalyst::Model::LDAP::Entry';
     $config_hash{'user_class'}
