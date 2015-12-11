@@ -392,7 +392,7 @@ objects that match it's criteria.
 sub lookup_roles {
     my ( $self, $userobj, $ldap ) = @_;
     if ( $self->use_roles == 0 || $self->use_roles =~ /^false$/i ) {
-        return undef;
+        return ();
     }
     $ldap ||= $self->role_search_as_user
         ? $userobj->ldap_connection : $self->ldap_bind;
