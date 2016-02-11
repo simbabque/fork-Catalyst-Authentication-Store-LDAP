@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use Catalyst::Exception;
 
 use Test::More;
 use Test::MockObject::Extends;
@@ -10,10 +9,45 @@ use Test::Exception;
 use Net::LDAP::Entry;
 use lib 't/lib';
 
-eval "use Catalyst::Model::LDAP";
-plan skip_all => "Catalyst::Model::LDAP not installed" if $@;
-
 use_ok("Catalyst::Authentication::Store::LDAP::Backend");
+
+
+my $back_without_use_roles = Catalyst::Authentication::Store::LDAP::Backend->new({
+    ldap_server => 'ldap://127.0.0.1:555',
+    binddn      => 'anonymous',
+    bindpw      => 'dontcarehow',
+    user_basedn => 'ou=foobar',
+    user_filter => '(&(objectClass=inetOrgPerson)(uid=%s))',
+    user_scope  => 'one',
+    user_field  => 'uid',
+});
+is $back_without_use_roles->use_roles, 1, 'use_roles enabled be default';
+
+my $back_with_use_roles_disabled = Catalyst::Authentication::Store::LDAP::Backend->new({
+    ldap_server => 'ldap://127.0.0.1:555',
+    binddn      => 'anonymous',
+    bindpw      => 'dontcarehow',
+    user_basedn => 'ou=foobar',
+    user_filter => '(&(objectClass=inetOrgPerson)(uid=%s))',
+    user_scope  => 'one',
+    user_field  => 'uid',
+    use_roles   => 0,
+});
+is $back_with_use_roles_disabled->use_roles, 0, 'use_roles disabled when set
+to 0';
+
+my $back_with_use_roles_enabled = Catalyst::Authentication::Store::LDAP::Backend->new({
+    ldap_server => 'ldap://127.0.0.1:555',
+    binddn      => 'anonymous',
+    bindpw      => 'dontcarehow',
+    user_basedn => 'ou=foobar',
+    user_filter => '(&(objectClass=inetOrgPerson)(uid=%s))',
+    user_scope  => 'one',
+    user_field  => 'uid',
+    use_roles   => 1,
+});
+is $back_with_use_roles_enabled->use_roles, 1, 'use_roles enabled when set to
+1';
 
 my (@searches, @binds);
 for my $i (0..1) {

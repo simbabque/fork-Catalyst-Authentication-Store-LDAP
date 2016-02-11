@@ -50,6 +50,7 @@ Catalyst::Authentication::Store::LDAP::Backend
                 'deref' => 'always',
             },
             'role_search_as_user' => 0,
+            'persist_in_session'  => 'all',
     );
 
     our $users = Catalyst::Authentication::Store::LDAP::Backend->new(\%config);
@@ -78,6 +79,7 @@ our $VERSION = '1.015';
 use Catalyst::Authentication::Store::LDAP::User;
 use Net::LDAP;
 use Catalyst::Utils ();
+use Catalyst::Exception;
 
 BEGIN {
     __PACKAGE__->mk_accessors(
@@ -88,6 +90,7 @@ BEGIN {
             role_filter role_scope role_field role_value
             role_search_options start_tls start_tls_options
             user_results_filter user_class role_search_as_user
+            persist_in_session
             )
     );
 }
@@ -118,12 +121,16 @@ sub new {
     $config_hash{'role_filter'} ||= '(memberUid=%s)';
     $config_hash{'role_scope'}  ||= 'sub';
     $config_hash{'role_field'}  ||= 'cn';
-    $config_hash{'use_roles'}   ||= '1';
+    $config_hash{'use_roles'}   = '1'
+        unless exists $config_hash{use_roles};
     $config_hash{'start_tls'}   ||= '0';
     $config_hash{'entry_class'} ||= 'Catalyst::Model::LDAP::Entry';
     $config_hash{'user_class'}
         ||= 'Catalyst::Authentication::Store::LDAP::User';
     $config_hash{'role_search_as_user'} ||= 0;
+    $config_hash{'persist_in_session'}  ||= 'username';
+    Catalyst::Exception->throw('persist_in_session must be either username or all')
+        unless $config_hash{'persist_in_session'} =~ /\A(?:username|all)\z/;
 
     Catalyst::Utils::ensure_class_loaded( $config_hash{'user_class'} );
     my $self = \%config_hash;
@@ -385,7 +392,7 @@ objects that match it's criteria.
 sub lookup_roles {
     my ( $self, $userobj, $ldap ) = @_;
     if ( $self->use_roles == 0 || $self->use_roles =~ /^false$/i ) {
-        return undef;
+        return ();
     }
     $ldap ||= $self->role_search_as_user
         ? $userobj->ldap_connection : $self->ldap_bind;
@@ -443,15 +450,28 @@ sub user_supports {
     Catalyst::Authentication::Store::LDAP::User->supports(@_);
 }
 
-=head2 from_session( I<id>, I<$c> )
+=head2 from_session( I<id>, I<$c>, $frozenuser )
 
-Returns get_user() for I<id>.
+Revives a serialized user from storage in the session.
+
+Supports users stored with a different persist_in_session setting.
 
 =cut
 
 sub from_session {
-    my ( $self, $c, $id ) = @_;
-    $self->get_user( $id, $c );
+    my ( $self, $c, $frozenuser ) = @_;
+
+    # we need to restore the user depending on the current storage of the
+    # user in the session store which might differ from what
+    # persist_in_session is set to now
+    if ( ref $frozenuser eq 'HASH' ) {
+        # we can rely on the existance of this key if the user is a hashref
+        if ( $frozenuser->{persist_in_session} eq 'all' ) {
+            return $self->user_class->new( $self, $frozenuser->{user}, $c, $frozenuser->{_roles} );
+        }
+    }
+
+    return $self->get_user( $frozenuser, $c );
 }
 
 1;

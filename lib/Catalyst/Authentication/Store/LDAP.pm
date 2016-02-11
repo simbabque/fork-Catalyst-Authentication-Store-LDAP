@@ -19,6 +19,8 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Catalyst::Authentication::Store::LDAP
@@ -66,6 +68,7 @@ Catalyst::Authentication::Store::LDAP
                  attrs => [qw( distinguishedname name mail )],
                },
                user_results_filter => sub { return shift->pop_entry },
+               persist_in_session  => 'all',
              },
            },
          },
@@ -313,6 +316,28 @@ by binding to the directory with the details in the I<binddn> and I<bindpw>
 fields. If this is set to false, then the role search will instead be
 performed when bound as the user you authenticated as.
 
+=head2 persist_in_session
+
+Can take one of the following values, defaults to C<username>:
+
+=over
+
+=item C<username>
+
+Only store the username in the session and lookup the user and its roles
+on every request. That was how the module worked until version 1.015 and is
+also the default for backwards compatibility.
+
+=item C<all>
+
+Store the user object and its roles in the session and never look it up in
+the store after login.
+
+B<NOTE:> It's recommended to limit the user attributes fetched from LDAP
+using L<user_search_options> / attrs to not exhaust the session store.
+
+=back
+
 =head2 entry_class
 
 The name of the class of LDAP entries returned. This class should
@@ -333,11 +358,13 @@ L<Catalyst::Plugin::Authentication/default_auth_store> with this object.
 =head1 AUTHORS
 
 Adam Jacob <holoway@cpan.org>
+Peter Karman <karman@cpan.org>
+Alexander Hartmaier <abraxxa@cpan.org>
 
 Some parts stolen shamelessly and entirely from
 L<Catalyst::Plugin::Authentication::Store::Htpasswd>.
 
-Currently maintained by Peter Karman <karman@cpan.org>.
+Currently maintained by Dagfinn Ilmari Mannsåker <ilmari@cpan.org>.
 
 =head1 THANKS
 

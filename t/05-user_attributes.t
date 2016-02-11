@@ -2,14 +2,10 @@
 
 use strict;
 use warnings;
-use Catalyst::Exception;
 
 use Test::More;
 use lib 't/lib';
 use LDAPTest;
-
-eval "use Catalyst::Model::LDAP";
-plan skip_all => "Catalyst::Model::LDAP not installed" if $@;
 
 my $server = LDAPTest::spawn_server();
 

@@ -49,6 +49,7 @@ use base qw( Catalyst::Authentication::User Class::Accessor::Fast );
 use strict;
 use warnings;
 use Scalar::Util qw/refaddr/;
+use Net::LDAP::Entry;
 
 our $VERSION = '1.015';
 
@@ -74,11 +75,11 @@ Returns a L<Catalyst::Authentication::Store::LDAP::User> object.
 =cut
 
 sub new {
-    my ( $class, $store, $user, $c ) = @_;
+    my ( $class, $store, $user, $c, $roles ) = @_;
 
     return unless $user;
 
-    bless { store => $store, user => $user, }, $class;
+    bless { store => $store, user => $user, _roles => $roles }, $class;
 }
 
 =head2 id
@@ -164,12 +165,28 @@ sub roles {
 
 =head2 for_session
 
-Returns the User object, stringified.
+Returns the user for persistence in the session depending on the
+persist_in_session config option.
+
+Stores the persist_in_session setting so it can be used to revive the user
+even if the setting has been changed.
 
 =cut
 
 sub for_session {
     my $self = shift;
+
+    if ( $self->store->persist_in_session eq 'all' ) {
+        # use the roles accessor to ensure the roles are fetched
+        return {
+            # store the persistance setting in the session to know how to
+            # restore the user
+            persist_in_session  => $self->store->persist_in_session,
+            user                => $self->user,
+            _roles              => [ $self->roles ],
+        };
+    }
+
     return $self->stringify;
 }
 
