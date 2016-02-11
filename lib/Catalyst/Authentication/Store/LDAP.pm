@@ -318,21 +318,25 @@ performed when bound as the user you authenticated as.
 
 =head2 persist_in_session
 
-Can take one of the following values, defaults to I<username>:
+Can take one of the following values, defaults to C<username>:
 
-=head3 username
+=over
+
+=item C<username>
 
 Only store the username in the session and lookup the user and its roles
 on every request. That was how the module worked until version 1.015 and is
 also the default for backwards compatibility.
 
-=head3 all
+=item C<all>
 
 Store the user object and its roles in the session and never look it up in
 the store after login.
 
 B<NOTE:> It's recommended to limit the user attributes fetched from LDAP
-using L<user_search_options> / attrs to not exhaust the session store..
+using L<user_search_options> / attrs to not exhaust the session store.
+
+=back
 
 =head2 entry_class
 

@@ -275,19 +275,20 @@ CONFIGURATION OPTIONS
     instead be performed when bound as the user you authenticated as.
 
   persist_in_session
-    Can take one of the following values, defaults to *username*:
+    Can take one of the following values, defaults to "username":
 
-   username
-    Only store the username in the session and lookup the user and its roles
-    on every request. That was how the module worked until version 1.015 and
-    is also the default for backwards compatibility.
+    "username"
+        Only store the username in the session and lookup the user and its
+        roles on every request. That was how the module worked until version
+        1.015 and is also the default for backwards compatibility.
 
-   all
-    Store the user object and its roles in the session and never look it up
-    in the store after login.
+    "all"
+        Store the user object and its roles in the session and never look it
+        up in the store after login.
 
-    NOTE: It's recommended to limit the user attributes fetched from LDAP
-    using user_search_options / attrs to not exhaust the session store..
+        NOTE: It's recommended to limit the user attributes fetched from
+        LDAP using user_search_options / attrs to not exhaust the session
+        store.
 
   entry_class
     The name of the class of LDAP entries returned. This class should exist
