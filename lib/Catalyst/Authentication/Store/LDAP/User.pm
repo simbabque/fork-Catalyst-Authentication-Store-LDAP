@@ -51,7 +51,7 @@ use warnings;
 use Scalar::Util qw/refaddr/;
 use Net::LDAP::Entry;
 
-our $VERSION = '1.015';
+our $VERSION = '1.016';
 
 BEGIN { __PACKAGE__->mk_accessors(qw/user store/) }
 
