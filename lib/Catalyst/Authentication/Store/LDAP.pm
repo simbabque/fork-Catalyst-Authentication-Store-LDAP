@@ -229,7 +229,7 @@ as identifier for the user.
 
 =head2 user_search_options
 
-This takes a hashref.  It will append it's values to the call to
+This takes a hashref.  It will append its values to the call to
 L<Net::LDAP>'s "search" method during the initial user lookup.  See
 L<Net::LDAP> for valid options.
 
@@ -297,7 +297,7 @@ If this is set to "dn", we will use the User Objects DN.
 
 =head2 role_search_options
 
-This takes a hashref.  It will append it's values to the call to
+This takes a hashref.  It will append its values to the call to
 L<Net::LDAP>'s "search" method during the user's role lookup.  See
 L<Net::LDAP> for valid options.
 

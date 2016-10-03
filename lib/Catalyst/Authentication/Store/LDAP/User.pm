@@ -25,7 +25,7 @@ username.
 
 =head1 DESCRIPTION
 
-This wraps up an LDAP object and presents a simplified interface to it's
+This wraps up an LDAP object and presents a simplified interface to its
 contents.  It uses some AUTOLOAD magic to pass method calls it doesn't
 understand through as simple read only accessors for the LDAP entries
 various attributes.
