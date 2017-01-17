@@ -334,7 +334,7 @@ Store the user object and its roles in the session and never look it up in
 the store after login.
 
 B<NOTE:> It's recommended to limit the user attributes fetched from LDAP
-using L<user_search_options> / attrs to not exhaust the session store.
+using L</user_search_options> / C<attrs> to not exhaust the session store.
 
 =back
 
