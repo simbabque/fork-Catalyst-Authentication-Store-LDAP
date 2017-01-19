@@ -14,6 +14,7 @@ build_requires('Net::LDAP::Server::Test' => '0.07');
 build_requires('Test::More', '0.88');
 build_requires('Test::MockObject');
 build_requires('Test::Exception');
+build_requires('Test::Needs');
 
 resources repository => 'git://git.shadowcat.co.uk/catagits/Catalyst-Authentication-Store-LDAP.git';
 
