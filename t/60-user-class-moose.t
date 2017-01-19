@@ -6,6 +6,7 @@ use warnings;
 use Test::More;
 use lib 't/lib';
 use LDAPTest;
+use Storable qw/ freeze /;
 use Test::Exception;
 use Test::Needs 'Moose', 'MooseX::NonMoose';
 
@@ -33,7 +34,7 @@ my $user;
 lives_ok { $user = $back->find_user( { username => 'somebody' } ) } 'No weird MooseX::NonMoose exceptions';
 
 isa_ok( $user, "Catalyst::Authentication::Store::LDAP::User" );
-isa_ok( $user, "UserClass");
+isa_ok( $user, "UserClassWithNonMoose");
 
 is( $user->my_method, 'frobnitz', "methods on user class work" );
 
@@ -43,8 +44,8 @@ $server->stop();
 
 $server = LDAPTest::spawn_server();
 
-lives_and { ok $user->check_password('foo') }, 'Can check correct password';
-lives_and { ok $user->check_password('bar') }, 'Can check wrong password';
+lives_and { ok $user->check_password('foo') } 'Can check correct password';
+lives_and { ok $user->check_password('bar') } 'Can check wrong password';
 
 my $frozen_user;
 lives_ok { $frozen_user = freeze $user } 'Can freeze user with Storable';
