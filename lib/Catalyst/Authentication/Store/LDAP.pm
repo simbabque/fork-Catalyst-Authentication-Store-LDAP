@@ -348,6 +348,31 @@ exist and is expected to be a subclass of Net::LDAP::Entry
 The name of the class of user object returned. By default, this is
 L<Catalyst::Authentication::Store::LDAP::User>.
 
+If you want to use L<Moose> for your subclass you can use L<MooseX::NonMoose>.
+To make this work, you need to include a C<BUILDARGS> method in your
+subclass, because the interface of
+L<Catalyst::Authentication::Store::LDAP::User> is different from what
+L<MooseX::NonMoose> expects.
+
+This template will get you started.
+
+    package My::MoosedUp::User;
+    use Moose;
+    use MooseX::NonMoose;
+    extends 'Catalyst::Authentication::Store::LDAP::User';
+
+    # place Moose things here
+
+    sub BUILDARGS { +{} }
+
+    1;
+
+In case you want to actually use C<BUILDARGS>, make sure it returns
+something sensible.
+
+There is also a test case included with this distribution that you can look
+at.
+
 =head1 METHODS
 
 =head2 new
