@@ -77,8 +77,6 @@ Returns a L<Catalyst::Authentication::Store::LDAP::User> object.
 sub new {
     my ( $class, $store, $user, $c, $roles ) = @_;
 
-    return unless $user;
-
     bless { store => $store, user => $user, _roles => $roles }, $class;
 }
 

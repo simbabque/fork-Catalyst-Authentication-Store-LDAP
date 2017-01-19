@@ -156,18 +156,22 @@ sub find_user {
 
 =head2 get_user( I<id>, $c)
 
-Creates a L<Catalyst::Authentication::Store::LDAP::User> object
-for the given User ID, or calls C<new> on the class specified in
-C<user_class>.  This instance of the store object, the results of
-C<lookup_user> and $c are passed as arguments (in that order) to C<new>.
-This is the preferred mechanism for getting a given User out of the Store.
+Looks up the user identified by I<id> and calls C<new> on the class
+specified in C<user_class> (default
+L<Catalyst::Authentication::Store::LDAP::User>) if the user is found.
+Otherwise C<undef> is returned.
+
+This instance of the store object, the results of C<lookup_user> and
+$c are passed as arguments (in that order) to C<new>.  This is the
+preferred mechanism for getting a given User out of the Store.
 
 =cut
 
 sub get_user {
     my ( $self, $id, $c ) = @_;
-    my $user = $self->user_class->new( $self, $self->lookup_user($id), $c );
-    return $user;
+    my $user_hash = $self->lookup_user($id);
+    return undef unless $user_hash;
+    return $self->user_class->new( $self, $user_hash, $c );
 }
 
 =head2 ldap_connect
